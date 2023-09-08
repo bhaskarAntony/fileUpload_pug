@@ -1,4 +1,4 @@
-doctype html
+ldoctype html
 html(lang="en")
     head
         meta(charset="UTF-8")
@@ -9,31 +9,59 @@ html(lang="en")
         script.
             const url = `http://localhost:5600`
 
-            const deleteHandler = async (id)=>{
-                
+            const deleteHandler =  (id)=>{
+                  if(window.confirm(`Are you sure to delete user?`)) {
+                 fetch(`${url}/api/files/file/delete/${id}`,{
+                    method:"DELETE",
+                    headers:{"Content-Type":"application/json"}
+                }).then(res=>res.json())
+                .then(res=>{
+                    window.location.reload()
+                }).catch((error)=>alert(error))
+                  }
             }
+
             const printData = async (files) => {
+                 
             const file_container = document.getElementById("files")
                files.forEach((element, index)=>{
                  file_container.innerHTML +=`
-                    <div class="col-md-12 col-lg-3">
-                        <div class="card">
-                                <embed src=${element.filename} class="card-img-top">
+                    <div class="col-sm-12 col-md-4 col-lg-4">
+                        <div class="card  text-white mt-3 rounded-4" style="background:linear-gradient(rgba(57, 55, 55, 0.848), rgba(69, 6, 217, 0.317))">
+                               <div class="p-2 w-100">
+                                <embed src=${element.filename} autoplay class="card-img-top rounded-4" style="max-height:180px; min-height:200px; object-fit:cover;">
+                               </div>
                                 <div class="card-body">
-                                    <p><strong>Field name:</strong> ${element.fieldname}</p>
-                                     <p><strong>Originalname:</strong> ${element.originalname}</p>
-                                      <p><strong>Mimetype:</strong> ${element.mimetype}</p>
-                                       <p><strong>Destination:</strong> ${element.destination}</p>
-                                        <p><strong>Filename:</strong> ${element.filename}</p>
-                                     <p><strong>Path:</strong> ${element.path}</p>
-                                      <p><strong>Size:</strong> ${element._id}</p>
-                                </div>
-                                <div class="card-footer">
-                                    <button type="button" onclick="${deleteHandler(element._id)}" class="btn btn-danger text-white">DELETE</button>
+                                     <p><strong class="text-danger">Field name:</strong> ${element.filename}</p>
+                                    <a data-bs-toggle="collapse" href="#collapseExample${element._id}" role="button" aria-expanded="false" aria-controls="collapseExample${element._id}">
+                                    View More Details..
+                                </a>
+                                    <div class="collapse" id="collapseExample${element._id}">
+                                    <ul class="list-group mt-3 ">
+                                    <li class="list-group-item bg-dark text-white"><p><strong class="text-danger">Originalname:</strong> ${element.originalname}</p></li>
+                                    <li class="list-group-item bg-dark text-white"> <p><strong class="text-danger">Mimetype:</strong> ${element.mimetype}</p></li>
+                                    <li class="list-group-item bg-dark text-white"> <p><strong class="text-danger">Destination:</strong> ${element.destination}</p></li>
+                                    <li class="list-group-item bg-dark text-white">   <p><strong class="text-danger">Filename:</strong> ${element.fieldname}</p></li>
+                                    <li class="list-group-item bg-dark text-white"><p><strong class="text-danger">Path:</strong> ${element.path}</p></li>
+                                    <li class="list-group-item bg-dark text-white"><p><strong class="text-danger">Size:</strong> ${element._id}</p></li>
+                                    <li class="list-group-item  bg-dark text-white d-flex g-2 justify-content-between">
+                                     <button type="button" onclick="deleteHandler('${element._id}')"} class="btn btn-danger text-white flex-1">DELETE</button>
+                                    <a class="btn bg-secondary text-white flex-1"data-bs-toggle="collapse" href="#collapseExample${element._id}" role="button" aria-expanded="false" aria-controls="collapseExample${element._id}">Cancel</a>
+                                    
+                                   </li>
+                                    </ul>
+                                    
+                                   
                                     </div>
+
+     
+                                </div>
+                                
                             </div>
                     </div>
                 `
+                
+           
                })
             }
             //to read the data
@@ -47,8 +75,8 @@ html(lang="en")
             .catch((err)=>{
                 console.log(err)
             })
-    body
-        nav.navbar.navbar-expand-md.navbar-dark.bg-success 
+    body.bg-black 
+        nav.navbar.navbar-expand-md.navbar-dark.bg-success.sticky-top 
             .container 
                 a.navbar-brand(href="/") File Upload 
                 button.navbar-toggler(data-bs-toggle="collapse", data-bs-target="#menu")
@@ -64,5 +92,6 @@ html(lang="en")
             .row 
                 .col-md-12.text-center 
                     h3.display-3.text-success  Files 
-        .row(id="files") 
+        .container
+            .row(id="files") 
             
