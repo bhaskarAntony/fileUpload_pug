@@ -5,7 +5,48 @@ html(lang="en")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         title File Upload
         link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css")
-        script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js") 
+        script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js")
+        script.
+            const url = `http://localhost:5600`
+
+            const deleteHandler = async (id)=>{
+                
+            }
+            const printData = async (files) => {
+            const file_container = document.getElementById("files")
+               files.forEach((element, index)=>{
+                 file_container.innerHTML +=`
+                    <div class="col-md-12 col-lg-3">
+                        <div class="card">
+                                <embed src=${element.filename} class="card-img-top">
+                                <div class="card-body">
+                                    <p><strong>Field name:</strong> ${element.fieldname}</p>
+                                     <p><strong>Originalname:</strong> ${element.originalname}</p>
+                                      <p><strong>Mimetype:</strong> ${element.mimetype}</p>
+                                       <p><strong>Destination:</strong> ${element.destination}</p>
+                                        <p><strong>Filename:</strong> ${element.filename}</p>
+                                     <p><strong>Path:</strong> ${element.path}</p>
+                                      <p><strong>Size:</strong> ${element._id}</p>
+                                </div>
+                                <div class="card-footer">
+                                    <button type="button" onclick="${deleteHandler(element._id)}" class="btn btn-danger text-white">DELETE</button>
+                                    </div>
+                            </div>
+                    </div>
+                `
+               })
+            }
+            //to read the data
+            fetch(`${url}/api/files/all`)
+            .then(res=>res.json())
+            .then(res=>{
+                console.log(res)
+
+                printData(res.allFiles)
+            })
+            .catch((err)=>{
+                console.log(err)
+            })
     body
         nav.navbar.navbar-expand-md.navbar-dark.bg-success 
             .container 
@@ -22,4 +63,6 @@ html(lang="en")
         .container 
             .row 
                 .col-md-12.text-center 
-                    h3.display-3.text-success  Files     
+                    h3.display-3.text-success  Files 
+        .row(id="files") 
+            
