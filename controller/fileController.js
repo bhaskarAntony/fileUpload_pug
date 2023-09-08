@@ -38,8 +38,8 @@ try{
 }
 const fileDelete = async(req, res)=>{
     try{
-        let id= req.params.id
-        const existId = Files.findById({_id: id})
+        var id = req.params.id
+        const existId = await Files.findById({_id: id})
         if(!existId){
             return res.status(404).json({msg:"requested is is not exists."})
         }
@@ -47,7 +47,7 @@ const fileDelete = async(req, res)=>{
         await Files.findByIdAndDelete({_id: id})
         res.status(200).json({msg:"file deleted successfully."})
     } catch (error){
-        return res.status(500).json({msg:error})
+        return res.status(500).json({msg:error, id})
     }
 }
 
